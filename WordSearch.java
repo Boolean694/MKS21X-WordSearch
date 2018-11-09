@@ -13,7 +13,7 @@ public class WordSearch {
 		cc = columns;
 	}
 	
-	private void clear() {
+	public void clear() {
 		for(int q = 0; q < data.length; q++) {
 			for(int w = 0; w < data[q].length; w++) {
 				data[q][w] = '_';
@@ -33,7 +33,7 @@ public class WordSearch {
 		return s;
 	}
 	
-	public boolean addWordHorizontal(int r, int c, String w) {
+	public boolean addWordHorizontal(String w, int r, int c) {
 		if(r >= rc || c >= cc) {return false;}
 		if(w.length() + c > cc) {return false;}
 		for(int q = c; q < w.length() + c; q++) {
@@ -52,7 +52,7 @@ public class WordSearch {
 		return true;
 	}
 	
-	public boolean addWordVertical(int r, int c, String w) {
+	public boolean addWordVertical(String w, int r, int c) {
 		if(r >= rc || c >= cc) {return false;}
 		if(w.length() + r > rc) {return false;}
 		for(int q = r; q < w.length() + r; q++) {
@@ -67,6 +67,34 @@ public class WordSearch {
 		}
 		for(int ro = r; ro < w.length() + r; ro++) {
 			data[ro][c] = w.charAt(ro - r);
+		}
+		return true;
+	}
+	
+	public boolean addWordDiagonal(String w, int r, int c) {
+		if(r >= rc || c >= cc) {return false;}
+		
+		if(w.length() + r > rc || w.length() + c > cc) {return false;}
+		int lrc = r;
+		int lcc = c;
+		for(int q = 0; q < w.length(); q++) {
+			if(data[lrc][lcc] != '_') {
+				if(w.charAt(q) == data[lrc][lcc]) {
+					q += 0;
+				}
+				else {
+					return false;
+				}
+			}
+			lrc++;
+			lcc++;
+		}
+		int slrc = r;
+		int slcc = c;
+		for(int a = 0; a < w.length(); a++) {
+			data[slrc][slcc] = w.charAt(a);
+			slrc++;
+			slcc++;
 		}
 		return true;
 	}
