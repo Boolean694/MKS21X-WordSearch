@@ -1,8 +1,17 @@
+import java.util.*;
+import java.io.*;
+import java.io.FileNotFoundException;
+
+
 public class WordSearch {
+	
 	private char[][] data;
 	private int rc;
 	private int cc;
-	public WordSearch(int rows, int columns) {
+	private String file;
+	private String fileName;
+	
+	public WordSearch(int rows, int columns, String fileN) throws FileNotFoundException{
 		data = new char[rows][columns];
 		for(int q = 0; q < data.length; q++) {
 			for(int w = 0; w < data[q].length; w++) {
@@ -11,7 +20,18 @@ public class WordSearch {
 		}
 		rc = rows;
 		cc = columns;
+		fileName = fileN;
+		File f = new File(fileN);
+		Scanner in = new Scanner(f);
+		file = "";
+		String l = "";
+		while(in.hasNext()) {
+			l = in.nextLine();
+			file += l;
+			file += "\n";
+		}
 	}
+	
 	
 	public void clear() {
 		for(int q = 0; q < data.length; q++) {
@@ -21,13 +41,16 @@ public class WordSearch {
 		}
 	}
 	
+	
 	public String toString() {
 		String s = "";
 		for(int q = 0; q < data.length; q++) {
+			s += "|";
 			for(int w = 0; w < data[q].length; w++) {
 				s += data[q][w];
 				s += " ";
 			}
+			s += "|";
 			s += "\n";
 		}
 		return s;
@@ -98,4 +121,6 @@ public class WordSearch {
 		}
 		return true;
 	}
+	
+	
 }
