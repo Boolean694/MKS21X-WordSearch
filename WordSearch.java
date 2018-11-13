@@ -12,6 +12,8 @@ public class WordSearch {
 	private String fileName;
 	private int seed;
 	private Random rnum;
+	private ArrayList<String> wtu;
+	private ArrayList<String> wau;
 	
 	public WordSearch(int rows, int columns, String fileN) throws FileNotFoundException{
 		data = new char[rows][columns];
@@ -35,6 +37,19 @@ public class WordSearch {
 		}
 		seed = (int)time;
 		rnum = new Random(time);
+		
+		wau = new ArrayList<String>();
+		wtu = new ArrayList<String>();
+		String fplhc = "";
+		for(int qwert = 0; qwert < file.length(); qwert++) {
+			if(file.charAt(qwert) == '\n'){
+				wtu.add(fplhc);
+				fplhc = "";
+			}
+			else {
+				fplhc += String.valueOf(file.charAt(qwert));
+			}
+		}
 	}
 	
 	public WordSearch(int rows, int columns, String fileN, int sd) throws FileNotFoundException{
