@@ -1,7 +1,7 @@
 import java.util.*;
 import java.io.*;
 import java.io.FileNotFoundException;
-
+import java.util.Random;
 
 public class WordSearch {
 	
@@ -10,9 +10,12 @@ public class WordSearch {
 	private int cc;
 	private String file;
 	private String fileName;
+	private int seed;
+	private Random rnum;
 	
 	public WordSearch(int rows, int columns, String fileN) throws FileNotFoundException{
 		data = new char[rows][columns];
+		long time = System.currentTimeMillis();
 		for(int q = 0; q < data.length; q++) {
 			for(int w = 0; w < data[q].length; w++) {
 				data[q][w] = '_';
@@ -30,8 +33,19 @@ public class WordSearch {
 			file += l;
 			file += "\n";
 		}
+		seed = (int)time;
+		rnum = new Random(time);
 	}
 	
+	public WordSearch(int rows, int columns, String fileN, int sd) throws FileNotFoundException{
+		this(rows, columns, fileN);
+		seed = sd;
+		rnum = new Random(sd);
+	}
+	
+	public void printFile() {
+		System.out.println(file);
+	}
 	
 	public void clear() {
 		for(int q = 0; q < data.length; q++) {

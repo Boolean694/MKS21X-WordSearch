@@ -20,7 +20,6 @@ public class WSDriver {
 		System.out.println(nw.addWordVertical("TOKYO", 0, 4));
 		System.out.println(nw.addWordDiagonal("METRO", 0, 0));
 		System.out.println(nw.toString());
-		
 		}
 		catch(FileNotFoundException e) {
 			e.printStackTrace();
