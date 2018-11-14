@@ -14,6 +14,7 @@ public class WordSearch {
 	private Random rnum;
 	private ArrayList<String> wtu;
 	private ArrayList<String> wau;
+	private boolean ky;
 	
 	public WordSearch(int rows, int columns, String fileN) throws FileNotFoundException{
 		data = new char[rows][columns];
@@ -50,6 +51,7 @@ public class WordSearch {
 				fplhc += String.valueOf(file.charAt(qwert));
 			}
 		}
+		ky = false;
 	}
 	
 	public WordSearch(int rows, int columns, String fileN, int sd) throws FileNotFoundException{
@@ -57,6 +59,14 @@ public class WordSearch {
 		seed = sd;
 		rnum = new Random(sd);
 	}
+	
+	public WordSearch(int rows, int columns, String fileN, int sd, String key) throws FileNotFoundException{
+		this(rows, columns, fileN);
+		seed = sd;
+		rnum = new Random(sd);
+		ky = (key == "key");
+	}
+
 	
 	public void printFile() {
 		System.out.println(file);
@@ -70,6 +80,18 @@ public class WordSearch {
 		}
 	}
 	
+	private boolean addWord() {
+		return true;
+	}
+	
+	private String alSt(ArrayList<String> a) {
+		String s = "";
+		for(int q = 0; q < a.size(); q++) {
+			s += a.get(q);
+			s += ", ";
+		}
+		return s;
+	}
 	
 	public String toString() {
 		String s = "";
@@ -82,6 +104,8 @@ public class WordSearch {
 			s += "|";
 			s += "\n";
 		}
+		s += "Words: " + alSt(wtu);
+		s += "Seed: " + seed;
 		return s;
 	}
 	
