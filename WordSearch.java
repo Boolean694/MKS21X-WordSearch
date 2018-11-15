@@ -36,8 +36,8 @@ public class WordSearch {
 			file += l;
 			file += "\n";
 		}
-		seed = (int)time;
-		rnum = new Random(time);
+		seed = (int)time % 100000;
+		rnum = new Random(seed);
 		
 		wau = new ArrayList<String>();
 		wtu = new ArrayList<String>();
@@ -57,13 +57,13 @@ public class WordSearch {
 	public WordSearch(int rows, int columns, String fileN, int sd) throws FileNotFoundException{
 		this(rows, columns, fileN);
 		seed = sd;
-		rnum = new Random(sd);
+		rnum = new Random(seed);
 	}
 	
 	public WordSearch(int rows, int columns, String fileN, int sd, String key) throws FileNotFoundException{
 		this(rows, columns, fileN);
 		seed = sd;
-		rnum = new Random(sd);
+		rnum = new Random(seed);
 		ky = (key == "key");
 	}
 
@@ -80,7 +80,45 @@ public class WordSearch {
 		}
 	}
 	
-	private boolean addWord() {
+	private boolean addWord(String w) {
+		int rw = rnum.nextInt(rc);
+		int cl = rnum.nextInt(cc);
+		int x = rnum.nextInt(3) - 1;
+		int y = rnum.nextInt(3) - 1;
+		if(x == 0 && y == 0) {
+			if(rnum.nextInt(2) == 0) {
+				if(rnum.nextInt(2) == 0) {
+					y++;
+				}
+				else {
+					y--;
+				}
+			}
+			else {
+				if(rnum.nextInt(2) == 0) {
+					x++;
+				}
+				else{x--;}
+			}
+		}
+		if(rc <= w.length() + rw || cc <= w.length() + cl){return false;}
+		int rco = rw;
+		int cco = cl;
+		for(int q = 0; q < w.length(); q++) {
+			if(data[rco][cco] != '_') {
+				if(data[rco][cco] == w.charAt(q)){q += 0;}
+				else{return false;}
+			}
+			rco++;
+			cco++;
+		}
+		int srco = rw;
+		int scco = cl;
+		for(int qe = 0; qe < w.length(); qe++) {
+			data[srco][scco] = w.charAt(qe);
+			srco++;
+			scco++;
+		}
 		return true;
 	}
 	
@@ -109,70 +147,13 @@ public class WordSearch {
 		return s;
 	}
 	
-	public boolean addWordHorizontal(String w, int r, int c) {
-		if(r >= rc || c >= cc) {return false;}
-		if(w.length() + c > cc) {return false;}
-		for(int q = c; q < w.length() + c; q++) {
-			if(data[r][q] != '_') {
-				if(w.charAt(q - c) == data[r][q]) {
-					q += 0;
-				}
-				else {
-					return false;
-				}
-			}
+	public static void main(String[] args) {
+		try {
+			int argsl = args.length;
+			if(argsl < 3){System.out.println("You must specify at least the number of rows, number of columns, and file name.");}
+			Integer.parseInt(args[0]);
 		}
-		for(int co = c; co < w.length() + c; co++) {
-			data[r][co] = w.charAt(co - c);
-		}
-		return true;
-	}
-	
-	public boolean addWordVertical(String w, int r, int c) {
-		if(r >= rc || c >= cc) {return false;}
-		if(w.length() + r > rc) {return false;}
-		for(int q = r; q < w.length() + r; q++) {
-			if(data[q][c] != '_') {
-				if(w.charAt(q - r) == data[q][c]) {
-					q += 0;
-				}
-				else {
-					return false;
-				}
-			}
-		}
-		for(int ro = r; ro < w.length() + r; ro++) {
-			data[ro][c] = w.charAt(ro - r);
-		}
-		return true;
-	}
-	
-	public boolean addWordDiagonal(String w, int r, int c) {
-		if(r >= rc || c >= cc) {return false;}
-		
-		if(w.length() + r > rc || w.length() + c > cc) {return false;}
-		int lrc = r;
-		int lcc = c;
-		for(int q = 0; q < w.length(); q++) {
-			if(data[lrc][lcc] != '_') {
-				if(w.charAt(q) == data[lrc][lcc]) {
-					q += 0;
-				}
-				else {
-					return false;
-				}
-			}
-			lrc++;
-			lcc++;
-		}
-		int slrc = r;
-		int slcc = c;
-		for(int a = 0; a < w.length(); a++) {
-			data[slrc][slcc] = w.charAt(a);
-			slrc++;
-			slcc++;
-		}
-		return true;
+		catch(Exception e) {System.out.println("Format should be: int, int, string,..."); System.exit(1);}
 	}
 	
 	
