@@ -52,6 +52,7 @@ public class WordSearch {
 			}
 		}
 		ky = false;
+		this.addAllWords();
 	}
 	
 	public WordSearch(int rows, int columns, String fileN, int sd) throws FileNotFoundException{
@@ -122,6 +123,31 @@ public class WordSearch {
 		return true;
 	}
 	
+	private void addAllWords() {
+		String wd = "";
+		while(wtu.size() > 0) {
+			wd = wtu.remove(rnum.nextInt(wtu.size()));
+			wau.add(wd);
+			int cnt = 0;
+			while(cnt < 101 && !this.addWord(wd)) {
+				this.addWord(wd);
+				cnt++;
+			}
+		}
+		if(!ky) {
+			for(int q = 0; q < data.length; q++) {
+				for(int qe = 0; qe < data[q].length; qe++) {
+					if(data[q][qe] == '_') {
+						data[q][qe] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".charAt(rnum.nextInt(26));
+					}
+					else{
+						q += 0;
+					}
+				}
+			}
+		}
+	}
+	
 	private String alSt(ArrayList<String> a) {
 		String s = "";
 		for(int q = 0; q < a.size(); q++) {
@@ -142,7 +168,7 @@ public class WordSearch {
 			s += "|";
 			s += "\n";
 		}
-		s += "Words: " + alSt(wtu);
+		s += "Words: " + alSt(wau);
 		s += "Seed: " + seed;
 		return s;
 	}
@@ -150,10 +176,27 @@ public class WordSearch {
 	public static void main(String[] args) {
 		try {
 			int argsl = args.length;
-			if(argsl < 3){System.out.println("You must specify at least the number of rows, number of columns, and file name.");}
-			Integer.parseInt(args[0]);
+			int thisr = Integer.parseInt(args[0]);
+			int thisc = Integer.parseInt(args[1]);
+			String thisfile = args[2];
+			WordSearch nws;
+			if(argsl == 3) {
+				nws = new WordSearch(thisr, thisc, thisfile);
+			}
+			else if(argsl == 4) {
+				nws = new WordSearch(thisr, thisc, thisfile, Integer.parseInt(args[3]));
+			}
+			else if(argsl == 5) {
+				nws = new WordSearch(thisr, thisc, thisfile, Integer.parseInt(args[3]), args[4]);
+			}
+			else {
+				int sfsdfsdfsdfsdfd = Integer.parseInt("b");
+				nws = new WordSearch(1, 1, "whatever");
+			}
+			
+			System.out.println(nws.toString());
 		}
-		catch(Exception e) {System.out.println("Format should be: int, int, string,..."); System.exit(1);}
+		catch(Exception e) {System.out.println("Format should be: int NumberOfRows, int NumberOfColumns, String FileName, optional stuff"); System.exit(1);}
 	}
 	
 	
