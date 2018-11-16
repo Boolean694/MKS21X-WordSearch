@@ -16,12 +16,12 @@ public class WordSearch {
 	private ArrayList<String> wau;
 	private boolean ky;
 	
-	public WordSearch(int rows, int columns, String fileN) throws FileNotFoundException{
+	public WordSearch(int rows, int columns, String fileN, int sd, String key) throws FileNotFoundException{
 		data = new char[rows][columns];
 		long time = System.currentTimeMillis();
 		for(int q = 0; q < data.length; q++) {
 			for(int w = 0; w < data[q].length; w++) {
-				data[q][w] = '_';
+				data[q][w] = ' ';
 			}
 		}
 		rc = rows;
@@ -36,7 +36,7 @@ public class WordSearch {
 			file += l;
 			file += "\n";
 		}
-		seed = (int)time % 100000;
+		if(sd == 0) {seed = (int)time % 100000;} else{seed = sd;}
 		rnum = new Random(seed);
 		
 		wau = new ArrayList<String>();
@@ -51,32 +51,14 @@ public class WordSearch {
 				fplhc += String.valueOf(file.charAt(qwert));
 			}
 		}
-		ky = false;
+		ky = (key.equals("key"));
 		this.addAllWords();
-	}
-	
-	public WordSearch(int rows, int columns, String fileN, int sd) throws FileNotFoundException{
-		this(rows, columns, fileN);
-		seed = sd;
-		rnum = new Random(seed);
-	}
-	
-	public WordSearch(int rows, int columns, String fileN, int sd, String key) throws FileNotFoundException{
-		this(rows, columns, fileN);
-		seed = sd;
-		rnum = new Random(seed);
-		ky = (key == "key");
-	}
-
-	
-	public void printFile() {
-		System.out.println(file);
 	}
 	
 	public void clear() {
 		for(int q = 0; q < data.length; q++) {
 			for(int w = 0; w < data[q].length; w++) {
-				data[q][w] = '_';
+				data[q][w] = ' ';
 			}
 		}
 	}
@@ -102,23 +84,24 @@ public class WordSearch {
 				else{x--;}
 			}
 		}
-		if(rc <= w.length() + rw || cc <= w.length() + cl){return false;}
+		
+		if(rw + (w.length() * x) < 0 || rw + (x * w.length()) >= rc || cl + (y * w.length()) < 0 || cl + (y * w.length()) >= cc) {return false;}
 		int rco = rw;
 		int cco = cl;
 		for(int q = 0; q < w.length(); q++) {
-			if(data[rco][cco] != '_') {
+			if(data[rco][cco] != ' ') {
 				if(data[rco][cco] == w.charAt(q)){q += 0;}
 				else{return false;}
 			}
-			rco++;
-			cco++;
+			rco += x;
+			cco += y;
 		}
 		int srco = rw;
 		int scco = cl;
 		for(int qe = 0; qe < w.length(); qe++) {
 			data[srco][scco] = w.charAt(qe);
-			srco++;
-			scco++;
+			srco += x;
+			scco += y;
 		}
 		return true;
 	}
@@ -129,15 +112,22 @@ public class WordSearch {
 			wd = wtu.remove(rnum.nextInt(wtu.size()));
 			wau.add(wd);
 			int cnt = 0;
-			while(cnt < 101 && !this.addWord(wd)) {
-				this.addWord(wd);
+			boolean tempb = false;
+			while(cnt < 2000 && !tempb) {
+				tempb = this.addWord(wd);
 				cnt++;
+			}
+			if(!tempb) {
+				while(cnt < 2000 && !tempb) {
+					tempb = this.addWord(wd);
+					cnt++;
+				}
 			}
 		}
 		if(!ky) {
 			for(int q = 0; q < data.length; q++) {
 				for(int qe = 0; qe < data[q].length; qe++) {
-					if(data[q][qe] == '_') {
+					if(data[q][qe] == ' ') {
 						data[q][qe] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".charAt(rnum.nextInt(26));
 					}
 					else{
@@ -181,17 +171,17 @@ public class WordSearch {
 			String thisfile = args[2];
 			WordSearch nws;
 			if(argsl == 3) {
-				nws = new WordSearch(thisr, thisc, thisfile);
+				nws = new WordSearch(thisr, thisc, thisfile, 0, "a");
 			}
 			else if(argsl == 4) {
-				nws = new WordSearch(thisr, thisc, thisfile, Integer.parseInt(args[3]));
+				nws = new WordSearch(thisr, thisc, thisfile, Integer.parseInt(args[3]), "a");
 			}
 			else if(argsl == 5) {
 				nws = new WordSearch(thisr, thisc, thisfile, Integer.parseInt(args[3]), args[4]);
 			}
 			else {
 				int sfsdfsdfsdfsdfd = Integer.parseInt("b");
-				nws = new WordSearch(1, 1, "whatever");
+				nws = new WordSearch(1, 1, "whatever", 0, "");
 			}
 			
 			System.out.println(nws.toString());
